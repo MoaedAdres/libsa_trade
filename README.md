@@ -1,98 +1,299 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# LibsaHub Backend API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A comprehensive NestJS backend for LibsaHub - a clothing rental marketplace platform for Syria.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Features
 
-## Description
+- **Complete Authentication System**
+  - JWT-based authentication
+  - Phone OTP authentication (Twilio ready)
+  - Google OAuth2 integration
+  - Facebook OAuth2 integration
+  - Role-based access control
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Comprehensive Database Schema**
+  - 19 entities with proper relationships
+  - Polymorphic relationships for addresses and files
+  - Audit logging system
+  - Photo requirements validation
 
-## Project setup
+- **File Management System**
+  - Multer-based file uploads
+  - Image quality scoring
+  - Metadata extraction
+  - Organized storage structure
 
-```bash
-$ npm install
-```
+- **Business Logic Modules**
+  - User management
+  - Supplier management
+  - Item catalog
+  - Booking system
+  - Payment processing
+  - Dispute management
+  - Communication system
 
-## Compile and run the project
+## 🛠️ Tech Stack
 
-```bash
-# development
-$ npm run start
+- **Framework**: NestJS + TypeScript
+- **Database**: PostgreSQL with TypeORM
+- **Authentication**: JWT + Passport
+- **File Upload**: Multer + Sharp
+- **Validation**: class-validator + class-transformer
+- **Documentation**: Swagger/OpenAPI
+- **Security**: Helmet + CORS + Rate Limiting
 
-# watch mode
-$ npm run start:dev
+## 📋 Prerequisites
 
-# production mode
-$ npm run start:prod
-```
+- Node.js (v18+)
+- PostgreSQL (v13+)
+- npm or yarn
 
-## Run tests
+## 🚀 Quick Start
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 1. Clone and Install
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+git clone <repository-url>
+cd libsahub-backend
+npm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 2. Environment Setup
 
-## Resources
+```bash
+cp .env.example .env
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+Edit `.env` with your configuration:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```env
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
+DB_DATABASE=libsahub
 
-## Support
+# JWT
+JWT_SECRET=your-super-secret-jwt-key
+JWT_REFRESH_SECRET=your-super-secret-refresh-key
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# OAuth (Optional)
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+FACEBOOK_APP_ID=your-facebook-app-id
+FACEBOOK_APP_SECRET=your-facebook-app-secret
 
-## Stay in touch
+# SMS/OTP (Optional)
+TWILIO_ACCOUNT_SID=your-twilio-account-sid
+TWILIO_AUTH_TOKEN=your-twilio-auth-token
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### 3. Database Setup
 
-## License
+```bash
+# Create database
+createdb libsahub
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+# Run migrations
+npm run migration:run
+
+# Seed initial data
+npm run seed
+```
+
+### 4. Start Development Server
+
+```bash
+npm run start:dev
+```
+
+The API will be available at:
+- **API**: http://localhost:3000/api/v1
+- **Documentation**: http://localhost:3000/api/docs
+
+## 📚 API Documentation
+
+Once the server is running, visit http://localhost:3000/api/docs for interactive API documentation.
+
+### Authentication Endpoints
+
+- `POST /auth/register` - Register new user
+- `POST /auth/login` - Login with email/password
+- `POST /auth/refresh` - Refresh access token
+- `GET /auth/google` - Google OAuth login
+- `GET /auth/facebook` - Facebook OAuth login
+- `POST /auth/otp/request` - Request OTP
+- `POST /auth/otp/verify` - Verify OTP
+- `GET /auth/profile` - Get current user profile
+
+### User Management
+
+- `GET /users` - Get all users (Admin only)
+- `GET /users/:id` - Get user by ID
+- `PATCH /users/:id` - Update user
+- `DELETE /users/:id` - Delete user (Admin only)
+
+### File Management
+
+- `POST /files/upload` - Upload file
+- `GET /files/entity/:ownerType/:ownerId` - Get files for entity
+- `DELETE /files/:id` - Delete file
+
+## 🗄️ Database Schema
+
+The application includes 19 main entities:
+
+### Core Entities
+- **users** - User accounts
+- **user_phones** - Phone numbers
+- **addresses** - Polymorphic addresses
+- **suppliers** - Shop/tailor profiles
+- **files** - Central file management
+
+### Business Entities
+- **items** - Physical garments
+- **consignments** - Consignment tracking
+- **listings** - Rental/sale offers
+- **bookings** - Reservations
+- **payments** - Financial transactions
+- **payouts** - Supplier payouts
+
+### Support Entities
+- **disputes** - Damage claims
+- **damage_assessments** - Detailed damage records
+- **conversations** - Chat conversations
+- **messages** - Chat messages
+- **audit_logs** - Action tracking
+- **photo_requirements** - Photo validation rules
+
+## 🔧 Development Scripts
+
+```bash
+# Development
+npm run start:dev          # Start with hot reload
+npm run start:debug        # Start with debugging
+
+# Building
+npm run build              # Build for production
+npm run start:prod         # Start production server
+
+# Database
+npm run migration:generate # Generate new migration
+npm run migration:run      # Run migrations
+npm run migration:revert   # Revert last migration
+npm run seed              # Seed database
+
+# Testing
+npm run test              # Run unit tests
+npm run test:e2e          # Run e2e tests
+npm run test:cov          # Run tests with coverage
+
+# Code Quality
+npm run lint              # Run ESLint
+npm run format            # Format code with Prettier
+```
+
+## 🔐 Authentication & Authorization
+
+### User Roles
+- **CUSTOMER** - Can rent items, create bookings
+- **SUPPLIER** - Can list items, manage inventory
+- **ADMIN** - Full system access
+- **STAFF** - Support and moderation access
+
+### Authentication Methods
+1. **Email/Password** - Traditional login
+2. **Phone OTP** - SMS-based authentication
+3. **Google OAuth2** - Social login
+4. **Facebook OAuth2** - Social login
+
+### Authorization
+- JWT tokens with 15-minute expiration
+- Refresh tokens with 7-day expiration
+- Role-based guards for endpoint protection
+- Rate limiting on sensitive endpoints
+
+## 📁 Project Structure
+
+```
+src/
+├── modules/                 # Feature modules
+│   ├── auth/               # Authentication
+│   ├── users/              # User management
+│   ├── suppliers/          # Supplier management
+│   ├── items/              # Item catalog
+│   ├── bookings/           # Booking system
+│   ├── payments/           # Payment processing
+│   ├── disputes/           # Dispute management
+│   ├── conversations/      # Communication
+│   ├── files/             # File management
+│   └── audit/             # Audit logging
+├── common/                 # Shared utilities
+│   ├── decorators/        # Custom decorators
+│   ├── filters/           # Exception filters
+│   ├── interceptors/      # Response interceptors
+│   ├── pipes/             # Validation pipes
+│   └── enums/             # TypeScript enums
+├── config/                # Configuration
+├── database/              # Database setup
+│   ├── migrations/        # Database migrations
+│   └── seeds/            # Database seeds
+└── utils/                 # Utility functions
+```
+
+## 🚀 Deployment
+
+### Production Environment Variables
+
+```env
+NODE_ENV=production
+PORT=3000
+DB_SYNCHRONIZE=false
+DB_LOGGING=false
+```
+
+### Docker Deployment (Optional)
+
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY dist ./dist
+EXPOSE 3000
+CMD ["node", "dist/main"]
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🆘 Support
+
+For support and questions:
+- Create an issue in the repository
+- Contact the development team
+- Check the API documentation at `/api/docs`
+
+## 🔄 Changelog
+
+### v1.0.0
+- Initial release
+- Complete authentication system
+- All 19 database entities
+- File upload system
+- API documentation
+- Database migrations and seeds
+
+---
+
+**Built with ❤️ for LibsaHub**
