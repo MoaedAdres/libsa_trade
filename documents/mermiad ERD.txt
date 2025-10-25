@@ -1,0 +1,425 @@
+erDiagram
+    %% ============================================
+    %% CORE USER & AUTHENTICATION
+    %% ============================================
+    
+    users ||--o{ user_phones : "has"
+    users ||--o{ addresses : "has (polymorphic)"
+    users ||--o{ suppliers : "owns/manages"
+    users ||--o{ bookings : "rents as customer"
+    users ||--o{ consignments : "owns items"
+    users ||--o{ audit_logs : "performs actions"
+    users ||--o{ messages : "sends"
+    users ||--o{ disputes : "raises"
+    users ||--o{ conversation_participants : "participates"
+    users ||--o{ supplier_violations : "records (staff)"
+    
+    users {
+        bigint id PK
+        varchar email UK
+        varchar password_hash
+        varchar name
+        enum role
+        boolean is_email_verified
+        boolean is_phone_verified
+        varchar oauth_provider
+        varchar avatar_path
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+    
+    user_phones {
+        bigint id PK
+        bigint user_id FK
+        varchar phone
+        boolean is_verified
+        timestamp verification_sent_at
+        timestamp verified_at
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    %% ============================================
+    %% ADDRESS SYSTEM
+    %% ============================================
+    
+    addresses {
+        bigint id PK
+        enum owner_type
+        bigint owner_id
+        varchar label
+        varchar line1
+        varchar line2
+        varchar city
+        varchar region
+        varchar postal_code
+        varchar country
+        decimal lat
+        decimal lng
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    suppliers ||--o{ addresses : "has (polymorphic)"
+    bookings }o--|| addresses : "pickup location"
+    bookings }o--|| addresses : "dropoff location"
+    
+    %% ============================================
+    %% SUPPLIER MANAGEMENT
+    %% ============================================
+    
+    suppliers ||--o{ items : "lists"
+    suppliers ||--o{ consignments : "accepts"
+    suppliers ||--o{ payouts : "receives"
+    suppliers ||--o{ supplier_violations : "has"
+    
+    suppliers {
+        bigint id PK
+        bigint user_id FK
+        varchar name
+        varchar slug UK
+        text description
+        varchar visible_contact
+        varchar real_contact
+        boolean contact_revealed
+        decimal rating
+        int total_reviews
+        enum status
+        enum verification_level
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    supplier_violations {
+        bigint id PK
+        bigint supplier_id FK
+        enum violation_type
+        enum severity
+        decimal penalty_amount
+        text description
+        bigint booking_id FK
+        json evidence_file_ids
+        boolean resolved
+        bigint created_by FK
+        timestamp created_at
+        timestamp resolved_at
+    }
+    
+    supplier_violations }o--|| bookings : "related to"
+    
+    %% ============================================
+    %% FILE MANAGEMENT
+    %% ============================================
+    
+    files {
+        bigint id PK
+        enum owner_type
+        bigint owner_id
+        enum file_type
+        varchar path
+        varchar original_filename
+        varchar mime_type
+        bigint size_bytes
+        varchar checksum
+        bigint uploaded_by FK
+        timestamp captured_at
+        decimal quality_score
+        json metadata
+        boolean is_processed
+        boolean is_public
+        timestamp created_at
+    }
+    
+    files }o--|| users : "uploaded by"
+    
+    %% Files can belong to multiple entities (polymorphic)
+    files }o--o{ items : "item photos"
+    files }o--o{ consignments : "consignment docs"
+    files }o--o{ bookings : "booking evidence"
+    files }o--o{ disputes : "dispute evidence"
+    files }o--o{ messages : "chat attachments"
+    
+    %% ============================================
+    %% ITEM & INVENTORY
+    %% ============================================
+    
+    items ||--o{ listings : "has"
+    items }o--|| consignments : "may be consigned"
+    
+    items {
+        bigint id PK
+        bigint supplier_id FK
+        varchar title
+        varchar sku
+        varchar size
+        varchar brand
+        varchar color
+        enum category
+        enum condition_rating
+        text description
+        decimal estimated_value
+        boolean is_consignment
+        bigint consignment_id FK
+        boolean intake_complete
+        boolean listing_approved
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+    
+    %% ============================================
+    %% CONSIGNMENT SYSTEM
+    %% ============================================
+    
+    consignments {
+        bigint id PK
+        bigint owner_user_id FK
+        bigint supplier_id FK
+        enum status
+        decimal commission_rate
+        bigint signed_agreement_file_id FK
+        bigint owner_id_scan_file_id FK
+        boolean intake_photos_complete
+        timestamp intake_at
+        bigint intake_by FK
+        timestamp return_at
+        bigint return_by FK
+        text notes
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    consignments }o--|| files : "agreement file"
+    consignments }o--|| files : "ID scan file"
+    consignments }o--|| users : "intake staff"
+    consignments }o--|| users : "return staff"
+    
+    %% ============================================
+    %% LISTING & PRICING
+    %% ============================================
+    
+    listings ||--o{ bookings : "has"
+    
+    listings {
+        bigint id PK
+        bigint item_id FK
+        enum type
+        decimal price
+        decimal deposit_amount
+        enum pricing_unit
+        enum availability_status
+        date available_from
+        date available_to
+        text cancellation_policy
+        int min_rental_days
+        int max_rental_days
+        boolean listing_photos_complete
+        boolean is_featured
+        int views_count
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    %% ============================================
+    %% BOOKING & RESERVATION
+    %% ============================================
+    
+    bookings ||--o{ payments : "has"
+    bookings ||--o{ disputes : "may have"
+    bookings ||--o{ conversations : "related to"
+    
+    bookings {
+        bigint id PK
+        bigint listing_id FK
+        bigint renter_id FK
+        date start_date
+        date end_date
+        enum booking_status
+        decimal total_amount
+        decimal deposit_amount
+        boolean deposit_paid
+        enum payment_method
+        bigint pickup_location_address_id FK
+        bigint dropoff_location_address_id FK
+        timestamp pickup_scheduled_at
+        timestamp return_scheduled_at
+        timestamp contact_revealed_at
+        text cancellation_reason
+        text special_instructions
+        boolean pickup_photos_complete
+        boolean return_photos_complete
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    %% ============================================
+    %% PAYMENT & FINANCIAL
+    %% ============================================
+    
+    payments {
+        bigint id PK
+        bigint booking_id FK
+        enum related_type
+        bigint related_id
+        enum type
+        decimal amount
+        varchar currency
+        enum method
+        enum status
+        varchar gateway_reference
+        bigint processed_by FK
+        decimal processing_fee
+        text notes
+        timestamp created_at
+        timestamp completed_at
+    }
+    
+    payments }o--|| users : "processed by (staff)"
+    
+    payouts {
+        bigint id PK
+        bigint supplier_id FK
+        date payout_period_start
+        date payout_period_end
+        decimal gross_amount
+        decimal platform_fee
+        decimal penalties
+        decimal net_amount
+        enum status
+        timestamp hold_until
+        enum payment_method
+        json bank_details
+        json included_booking_ids
+        bigint processed_by FK
+        timestamp created_at
+        timestamp completed_at
+    }
+    
+    payouts }o--|| users : "processed by (staff)"
+    
+    %% ============================================
+    %% DISPUTE & DAMAGE MANAGEMENT
+    %% ============================================
+    
+    disputes ||--o{ damage_assessments : "has"
+    disputes }o--|| users : "assigned to (staff)"
+    
+    disputes {
+        bigint id PK
+        bigint booking_id FK
+        bigint raised_by FK
+        enum dispute_type
+        enum damage_category
+        enum status
+        enum priority
+        decimal claimed_amount
+        decimal approved_amount
+        json liability_split
+        text description
+        text resolution_summary
+        json evidence_file_ids
+        bigint assigned_to FK
+        timestamp must_resolve_by
+        int escalation_level
+        timestamp created_at
+        timestamp resolved_at
+        timestamp updated_at
+    }
+    
+    damage_assessments {
+        bigint id PK
+        bigint dispute_id FK
+        bigint assessed_by FK
+        varchar damage_location
+        varchar damage_type
+        decimal severity_score
+        boolean repair_feasible
+        decimal estimated_repair_cost
+        decimal replacement_cost
+        text assessment_notes
+        json before_photo_ids
+        json after_photo_ids
+        timestamp created_at
+    }
+    
+    damage_assessments }o--|| users : "assessed by (staff)"
+    
+    %% ============================================
+    %% COMMUNICATION SYSTEM
+    %% ============================================
+    
+    conversations ||--o{ conversation_participants : "has"
+    conversations ||--o{ messages : "contains"
+    
+    conversations {
+        bigint id PK
+        varchar subject
+        bigint booking_id FK
+        bigint created_by FK
+        enum status
+        timestamp created_at
+        timestamp updated_at
+    }
+    
+    conversation_participants {
+        bigint id PK
+        bigint conversation_id FK
+        bigint user_id FK
+        enum role
+        boolean is_muted
+        timestamp last_read_at
+        timestamp joined_at
+    }
+    
+    messages {
+        bigint id PK
+        bigint conversation_id FK
+        bigint sender_id FK
+        enum message_type
+        text body
+        boolean is_redacted
+        varchar redacted_reason
+        boolean has_contact_flag
+        json attachment_file_ids
+        bigint reply_to_message_id FK
+        boolean is_edited
+        timestamp edited_at
+        timestamp created_at
+    }
+    
+    messages }o--|| messages : "replies to"
+    
+    %% ============================================
+    %% AUDIT & COMPLIANCE
+    %% ============================================
+    
+    audit_logs {
+        bigint id PK
+        bigint actor_id FK
+        varchar action
+        varchar target_type
+        bigint target_id
+        json old_values
+        json new_values
+        varchar ip_address
+        text user_agent
+        varchar session_id
+        timestamp created_at
+    }
+    
+    %% ============================================
+    %% PHOTO REQUIREMENTS
+    %% ============================================
+    
+    photo_requirements {
+        int id PK
+        varchar stage UK
+        json required_file_types
+        int minimum_count
+        int maximum_count
+        boolean mandatory
+        decimal quality_threshold
+        text description
+        timestamp created_at
+    }

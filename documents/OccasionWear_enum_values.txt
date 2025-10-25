@@ -1,0 +1,218 @@
+OccasionWear - ENUM values (canonical list)
+users.role:
+  - customer
+  - supplier_admin
+  - platform_ops
+  - admin
+  - proxy_agent
+
+addresses.owner_type:
+  - user
+  - supplier
+
+suppliers.status:
+  - pending
+  - active
+  - suspended
+  - blocked
+
+suppliers.verification_level:
+  - unverified
+  - basic
+  - premium
+
+supplier_violations.violation_type:
+  - missed_inspection
+  - poor_photos
+  - late_payout
+  - policy_breach
+  - quality_issues
+  - fake_listing
+
+supplier_violations.severity:
+  - minor
+  - major
+  - critical
+
+files.owner_type:
+  - item
+  - listing
+  - consignment
+  - consignment_request
+  - user
+  - booking
+  - message
+  - dispute
+  - other
+
+files.file_type:
+  - intake_front
+  - intake_back
+  - intake_detail
+  - intake_flaw
+  - listing_front
+  - listing_back
+  - listing_detail
+  - listing_styled
+  - pickup_proof
+  - return_front
+  - return_back
+  - return_detail
+  - damage_closeup
+  - consignor_handover
+  - consignor_collect
+  - id_scan
+  - agreement
+  - receipt
+  - chat_attachment
+  - other
+
+items.category:
+  - dress
+  - suit
+  - accessories
+  - shoes
+  - other
+
+items.condition_rating:
+  - new
+  - excellent
+  - good
+  - fair
+  - poor
+
+consignments.status:
+  - draft
+  - intake_pending
+  - active
+  - returned
+  - sold
+  - rejected
+  - disputed
+
+listings.type:
+  - rent
+  - sell
+
+listings.pricing_unit:
+  - per_day
+  - per_event
+  - flat
+
+listings.availability_status:
+  - available
+  - booked
+  - maintenance
+  - disabled
+
+bookings.booking_status:
+  - pending
+  - deposit_paid
+  - confirmed
+  - picked_up
+  - returned
+  - completed
+  - cancelled
+  - disputed
+  - refunded
+
+payments.related_type:
+  - booking
+  - consignment
+  - violation
+  - refund
+  - payout
+
+payments.type:
+  - deposit
+  - refund
+  - payout
+  - platform_fee
+  - damage_charge
+  - supplier_penalty
+  - commission
+
+payments.method:
+  - COD
+  - manual_transfer
+  - card
+  - bank_transfer
+  - internal_adjustment
+
+payments.status:
+  - pending
+  - processing
+  - completed
+  - failed
+  - cancelled
+
+payouts.status:
+  - scheduled
+  - processing
+  - completed
+  - failed
+  - on_hold
+
+payouts.payment_method:
+  - bank_transfer
+  - cash
+  - mobile_money
+
+disputes.dispute_type:
+  - damage
+  - not_received
+  - fraud
+  - quality_issue
+  - other
+  - damage_consignment
+
+disputes.damage_category:
+  - minor_stain
+  - major_stain
+  - minor_tear
+  - major_damage
+  - irreparable
+
+disputes.status:
+  - open
+  - investigating
+  - mediation
+  - resolved
+  - rejected
+  - escalated
+
+disputes.priority:
+  - low
+  - medium
+  - high
+  - urgent
+
+photo_requirement_assignments.target_type:
+  - global
+  - supplier
+  - category
+  - listing
+  - item
+
+conversations.status:
+  - active
+  - closed
+  - archived
+
+conversation_participants.role:
+  - customer
+  - supplier
+  - admin
+  - moderator
+
+messages.message_type:
+  - text
+  - image
+  - file
+  - system
+
+deposit_transactions.type:
+  - deposit_capture
+  - damage_deduction
+  - deposit_refund
+
